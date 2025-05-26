@@ -22,7 +22,7 @@
    node -v
    ```
 
-   If it shows something like `v18.17.1` (or whatever version is latest), then **congrats, Node.js is installed!** 🎉
+   If it shows something like `v18.17.1` (or whatever version is latest), then **congrats, Node.js is installed!** 
 
 9. Now try this command:
 
