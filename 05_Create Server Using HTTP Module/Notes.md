@@ -1,4 +1,4 @@
-## 🌐 Node.js HTTP Server - Beginner Notes (Human Tone)
+## Node.js HTTP Server
 
 We’re using Node.js to create a basic **web server** – which means we’re making a small computer program that **listens on a port (like a door)** and responds to people when they visit certain **URLs (routes)**.
 
