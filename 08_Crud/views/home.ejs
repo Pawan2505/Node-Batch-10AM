@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EJS CRUD</title>
+  </head>
+  <body style="background-color: aqua; color: red; text-align: center">
+    <h1>This is Home Page</h1>
+
+    <!-- <% for(let i = 0; i< 3; i++){%>
+    <%= data[i].name %>
+   <% }%> -->
+
+    <table border="1" align="center">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.map((v,i)=>{%>
+        <tr>
+          <td><%=i+1%></td>
+          <td><%=v.name%></td>
+          <td><%=v.age%></td>
+          <td></td>
+        </tr>
+        <% })%>
+      </tbody>
+    </table>
+  </body>
+</html>
