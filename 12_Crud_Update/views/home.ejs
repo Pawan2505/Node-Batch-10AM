@@ -1,0 +1,110 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EJS CRUD</title>
+  </head>
+  <body style="background-color: aqua; color: red; text-align: center">
+    <h1>This is Home Page</h1>
+
+    <form method="post" action="/addPerson">
+    <table border="1" align="center">
+      <tr>
+        <td>Enter Name</td>
+        <td><input type="text" name="name" /></td>
+      </tr>
+      <tr>
+        <td>Enter Age</td>
+        <td><input type="number" name="age" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" name="submit" /></td>
+      </tr>
+    </table>
+      </form>
+    <br />
+    <br />
+
+    <table border="1" align="center">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+       <% data.map((v, i) => { %>
+  <tr>
+    <td><%= i + 1 %></td>
+    <td><%= v.name %></td>
+    <td><%= v.age %></td>
+    <td><a href="/deletePerson/<%= --i %>"><button>X</button></a></td>
+  </tr>
+<% }) %>
+
+      </tbody>
+    </table>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body style="text-align: center; background-color: antiquewhite">
+    <h1>Home Page</h1>
+
+
+<form method="post" action="/addPerson">
+  <table>
+  <tr>
+    <td>Enter Name : </td>
+    <td><input type="text" name="name"></td>
+  </tr>
+  <tr>
+    <td>Enter Age : </td>
+    <td><input type="number" name="age"></td>
+  </tr>
+  <tr>
+    <td>Action</td>
+    <td><button type="submit">Submit</button></td>
+  </tr>
+</table>
+</form>
+
+
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% data.map((v,i)=>{%>
+        <tr>
+          <td><%= ++i %></td>
+          <td><%= v.name %></td>
+          <td><%= v.age %></td>
+          <td>
+            <a href="/deletePerson/<%= --i %>"><button>X</button></a>
+            ||
+            <a href="/updatePerson/?personPos=<%= i %>"><button>Update</button></a>
+          </td>
+        </tr>
+
+        <% })%>
+      </tbody>
+    </table>
+  </body>
+</html>
