@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <form method="post" action="/insertData">
+      <h1>User Record</h1>
+      <table border="1" cellspacing="0">
+        <tr>
+          <td><label>Name</label></td>
+          <td><input type="text" name="name" /></td>
+        </tr>
+        <tr>
+          <td><label>Email</label></td>
+          <td><input type="email" name="email" /></td>
+        </tr>
+        <tr>
+          <td><label>Phone</label></td>
+          <td><input type="number" name="phone" /></td>
+        </tr>
+        <tr>
+          <td><label>Password</label></td>
+          <td><input type="password" name="password" /></td>
+        </tr>
+        <tr>
+          <td><label>Gender</label></td>
+          <td>
+            <input type="radio" value="male" name="gender" />Male
+            <input type="radio" value="female" name="gender" />Female
+        </td>
+        </tr>
+         <tr>
+          <td><label>Hobby</label></td>
+          <td>
+            <input type="checkbox" value="cooking" name="hobby" />Cooking
+            <input type="checkbox" value="farming" name="hobby" />Farming
+            <input type="checkbox" value="teaching" name="hobby" />Teaching
+        </td>
+        </tr>
+        <tr>
+          <td><label>City</label></td>
+          <td>
+            <select name="city">
+              <option>---select city ---</option>
+              <% let city = ["surat","delhi","lucknow","mumbai"];
+              city.map((val)=>{ %>
+            
+            <option value="<%= val %>"><%= val %></option>
+            <%})%>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="submit" value="Submit" /></td>
+        </tr>
+      </table>
+
+      <br />
+      <br />
+    </form>
+
+    <table border="1" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Password</th>
+          <th>Gender</th>
+          <th>Hobby</th>
+          <th>City</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% record.forEach(function(item) { %>
+        <tr>
+          <td><%= item.name %></td>
+          <td><%= item.email %></td>
+          <td><%= item.phone %></td>
+          <td><%= item.password %></td>
+          <td><%= item.gender %></td>
+          <td><%= item.hobby %></td>
+          <td><%= item.city %></td>
+          <td>
+            <!-- <a href="/deleteData?id=<%= item.id%>"><button>Delete</button></a> -->
+            <a href="/deleteData/<%= item.id%>"><button>Delete</button></a>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+</html>
