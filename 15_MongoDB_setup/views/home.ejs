@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <h1>CRUD Operation</h1>
+
+
+    <form method="post" action="/addPerson">
+        <label>Enter Username</label>
+        <input type="text" name="username">
+        <label>Age</label>
+        <input type="number" name="age">
+        <button type="submit">Save</button>
+    </form>
+
+
+    <table border="1" cellspacing="0" cellpadding="10">
+      <thead>
+        <th>S.No</th>
+        <th>Username</th>
+        <th>Age</th>
+        <th>Action</th>
+      </thead>
+      <tbody>
+       <% { data.map((user,i)=>{ %>
+        <tr>
+          <td><%= ++i %></td>
+          <td><%= user.username %></td>
+          <td><%= user.age %></td>
+          <td>
+           <a href="/deletePerson/<%= --i %>"> <button>Delete</button></a>
+           <a href="/editPerson/<%= i %>"> <button>Edit</button></a>
+          </td>
+        </tr>
+       <% } ) } %>
+      </tbody>
+    </table>
+  </body>
+</html>
