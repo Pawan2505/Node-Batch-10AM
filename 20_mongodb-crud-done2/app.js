@@ -9,40 +9,20 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
 
-// app.post('/updateData',(req,res)=>{
-//     let id = req.body.editedId;
+app.get('/editData', (req,res)=>{
+    // console.log(req.query.id);
 
-//     adminTbl.findByIdAndUpdate(id,{
-//         name: req.body.name,
-//         email:req.body.email,
-//         phone:req.body.phone,
-//         gender:req.body.gender,
-//         hobby:req.body.bobby,
-//         password:req.body.password,
-//         city:req.body.city
-//     }).then((success)=>{
-//         console.log("record successfully Edited!!");
-//         return res.redirect('/');
-//     }).catch((err)=>{
-//         console.log(err);
-//         return false;
-//     })
-// })
+    let id = req.query.id;
 
-// app.get('/editData', (req,res)=>{
-//     // console.log(req.query.id);
+    adminTbl.findById(id).then((singleData)=>{
+        // console.log(singleData);
+        return res.render('editPage',{singleData})
+    }).catch((err)=>{
+        console.log(err);
+        return false;
+    })
 
-//     let id = req.query.id;
-
-//     adminTbl.findById(id).then((singleData)=>{
-//         // console.log(singleData);
-//         return res.render('editPage',{singleData})
-//     }).catch((err)=>{
-//         console.log(err);
-//         return false;
-//     })
-
-// })
+})
 
 app.get('/deleteData',(req,res)=>{
     let id = req.query.id;
@@ -58,6 +38,7 @@ app.get('/deleteData',(req,res)=>{
 app.post('/insertData', (req,res)=>{
 
 let editedId = req.body.editedId;
+console.log(editedId)
 
     const {name, email,phone,gender,hobby,password,city} = req.body;
 
