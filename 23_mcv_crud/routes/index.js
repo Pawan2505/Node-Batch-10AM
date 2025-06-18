@@ -1,26 +1,27 @@
 const express = require('express');
-
 const routes = express.Router();
 
-// console.log("ROUTING IS RUNNING....")
+const multer = require('multer');
+const path = require('path');
 
-const multer = require('multer')
-// fileupload
-
-
-const storage = multer.diskStorage({
-    destination:(req,res,cb)=>{
-        cb(null, 'uploads/')
+// Multer file upload config
+const filestorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
     },
-    filename:(req,file,cb)=>{
-        cb(null,file.originalname)
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); 
     }
-})
+});
 
-const imageUpload = multer({storage:storage}).single('image');
+const imageUpload = multer({ storage: filestorage }).single('image');
 
 const crudcontroller = require('../controllers/CrudController');
 
-routes.get('/',crudcontroller.index)
-routes.post('/insertData',imageUpload, crudcontroller.adddata);
+// Routes
+routes.get('/', crudcontroller.index);
+routes.post('/insertData', imageUpload, crudcontroller.adddata);
+routes.get('/editData', crudcontroller.editdata)
+routes.get('/deleteData',crudcontroller.deletedata)
+
 module.exports = routes;

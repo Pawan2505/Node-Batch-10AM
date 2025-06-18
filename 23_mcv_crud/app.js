@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path')
 
 const db = require('./config/db')
 const adminTbl = require('./models/adminTbl');
@@ -9,6 +10,7 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
 app.use('/', require('./routes'));
 
