@@ -6,12 +6,14 @@ const AddUser = () => {
   const [user, setUser] = useState({ name: '', email: '', phone: '' });
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChange = (e) =>{
+    const {name, value} = e.target;
+    setUser({ ...user, [name]: value });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('/api/admin', user);
+    await axios.post('/api/admin/add', user);
     navigate('/');
   };
 

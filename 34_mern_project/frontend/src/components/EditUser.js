@@ -8,7 +8,7 @@ const EditUser = () => {
   const navigate = useNavigate();
 
   const loadUser = async () => {
-    const res = await axios.get(`/api/admin/${id}`);
+    const res = await axios.get(`/api/admin/edit/${id}`);
     setUser(res.data);
   };
 
@@ -16,14 +16,14 @@ const EditUser = () => {
     loadUser();
   }, []);
 
-  const handleChange = (e) =>{
-setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
 
-  }
-    
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`/api/admin/${id}`, user);
+    await axios.put(`/api/admin/updatedata/${id}`, user);
     navigate("/");
   };
 
