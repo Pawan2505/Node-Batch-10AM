@@ -2,7 +2,7 @@
 
 ---
 
-## ✅ Method 1: Simple HTTP Server with Hardcoded Response
+## Method 1: Simple HTTP Server with Hardcoded Response
 
 This method sends plain text response directly using Node.js core modules.
 
