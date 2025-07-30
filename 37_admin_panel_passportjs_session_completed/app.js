@@ -12,6 +12,8 @@ app.use('/uploads', express.static(path.join(__dirname,"uploads")));
 app.use(cookieParser())
 app.use(express.urlencoded());
 
+// passport configuration start
+
 const session = require('express-session');
 const passport = require('passport');
 const localStrategy = require('./config/passport-loal-strategy');
@@ -28,6 +30,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+
+//passport configuration end
 
 app.use('/', require('./routes/index'))
 
