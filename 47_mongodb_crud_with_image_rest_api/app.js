@@ -1,0 +1,21 @@
+const express = require('express');
+const db = require('./config/db')
+
+const port = 8000;
+
+
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use('/', require('./routes/student.routes'));
+
+app.use('/faculty', require('./routes/faculties.routes'));
+
+app.listen(port, (err) => {
+  if (err) {
+    console.error(`Error starting server: ${err}`);
+  } else {
+    console.log(`Server is running on http://localhost:${port}`);
+  }
+});
