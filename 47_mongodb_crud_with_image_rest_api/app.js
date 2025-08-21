@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('./config/db')
-
+const path = require('path')
 const port = 8000;
 
 
@@ -11,6 +11,8 @@ app.use(express.json());
 app.use('/', require('./routes/student.routes'));
 
 app.use('/faculty', require('./routes/faculties.routes'));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port, (err) => {
   if (err) {

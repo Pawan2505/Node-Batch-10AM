@@ -12,28 +12,47 @@ module.exports.getAllFaculties = async (req, res) => {
 }
 
 module.exports.addFaculty = async (req, res) => {
-    try{
-        const newFaculty = await Faculty.create(req.body);
+    try {
+        const facultyData = req.body;
+
+        // Agar image bheja hai to uska filename save karo
+        if (req.file) {
+            facultyData.image = req.file.filename;
+        }
+
+        const newFaculty = await Faculty.create(facultyData);
         return res.status(201).json({ message: "Faculty added successfully", data: newFaculty });
-    }catch(error){
+    } catch (error) {
         console.error("Error adding faculty:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
+};
 
 module.exports.updateFaculty = async (req, res) => {
-    try{
+    try {
         const id = req.params.id;
-        const updatedFaculty = await Faculty.findByIdAndUpdate(id, req.body, { new: true });
+        const updateData = req.body;
+
+        // Agar naya image bheja hai to uska filename update karo
+        if (req.file) {
+            updateData.image = req.file.filename;
+        }
+
+        // Har update ke time updated_date ko current time pe set karo
+        updateData.updated_date = Date.now();
+
+        const updatedFaculty = await Faculty.findByIdAndUpdate(id, updateData, { new: true });
         if (!updatedFaculty) {
             return res.status(404).json({ message: "Faculty not found" });
         }
         return res.status(200).json({ message: "Faculty updated successfully", data: updatedFaculty });
-    }catch(error){
+    } catch (error) {
         console.error("Error updating faculty:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
+};
+
+
 
 
 module.exports.deleteFaculty = async (req, res) => {
