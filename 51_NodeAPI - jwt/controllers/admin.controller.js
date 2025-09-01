@@ -2,6 +2,7 @@ const AdminModel = require("../models/admin.model");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 module.exports.adminRegister = async (req, res) => {
   try {
@@ -45,10 +46,9 @@ module.exports.adminRegister = async (req, res) => {
   }
 };
 
-
 module.exports.adminLogin = async (req, res) => {
   try {
-    console.log(req.body); 
+    console.log(req.body);
     console.log(req.file);
 
     // check if admin exists
@@ -58,16 +58,20 @@ module.exports.adminLogin = async (req, res) => {
     }
 
     // check password
-    const isMatch = await bcrypt.compare(req.body.password, existAdmin.password);
+    const isMatch = await bcrypt.compare(
+      req.body.password,
+      existAdmin.password
+    );
     if (isMatch) {
-      let token = jwt.sign({adminToken:existAdmin},"AdminRNW",{expiresIn:'1h'});
+      let token = jwt.sign({ adminToken: existAdmin }, "AdminRNW", {
+        expiresIn: "1h",
+      });
       return res.status(200).json({
         message: "Admin logged in successfully ",
-        token: token
+        token: token,
       });
-    }else{
+    } else {
       return res.status(400).json({ error: "Invalid credentials" });
-
     }
   } catch (error) {
     console.error("Error occurred during admin login:", error);
@@ -75,18 +79,19 @@ module.exports.adminLogin = async (req, res) => {
   }
 };
 
-
 module.exports.adminProfile = async (req, res) => {
-  try{
-
-    return res.status(200).json({message:"Admin profile retrieved successfully", data:req.user})
-
-  }catch(error){
+  try {
+    return res
+      .status(200)
+      .json({
+        message: "Admin profile retrieved successfully",
+        data: req.user,
+      });
+  } catch (error) {
     console.error("Error occurred during admin profile retrieval:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
-
+};
 
 module.exports.changePassword = async (req, res) => {
   try {
@@ -95,7 +100,10 @@ module.exports.changePassword = async (req, res) => {
     const { cpass, npass, confirmPass } = req.body;
 
     // Check if current password is correct
- const isMatch = await bcrypt.compare(req.body.cpass, req.user.adminToken.password);
+    const isMatch = await bcrypt.compare(
+      req.body.cpass,
+      req.user.adminToken.password
+    );
 
     if (!isMatch) {
       return res.status(400).json({ error: "Current password is incorrect" });
@@ -103,31 +111,76 @@ module.exports.changePassword = async (req, res) => {
 
     // Prevent reusing the same password
     if (cpass === npass) {
-      return res.status(400).json({ error: "New password must be different from current password" });
+      return res
+        .status(400)
+        .json({
+          error: "New password must be different from current password",
+        });
     }
 
     // Confirm new password match
     if (npass !== confirmPass) {
-      return res.status(400).json({ error: "New password and confirm password do not match" });
+      return res
+        .status(400)
+        .json({ error: "New password and confirm password do not match" });
     }
 
     // Hash and update
     const hashPass = await bcrypt.hash(npass, 10);
- const updatePass = await AdminModel.findByIdAndUpdate(
-  req.user.adminToken._id,
-  { password: hashPass },
-  { new: true }
-);
-
+    const updatePass = await AdminModel.findByIdAndUpdate(
+      req.user.adminToken._id,
+      { password: hashPass },
+      { new: true }
+    );
 
     if (updatePass) {
       return res.status(200).json({ message: "Password changed successfully" });
     } else {
       return res.status(500).json({ error: "Failed to update password" });
     }
-
   } catch (error) {
     console.error("Error occurred during password change:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports.checkEmail = async (req, res) => {
+  try {
+    console.log(req.body);
+
+    let emailExist = await AdminModel.findOne({ email: req.body.email });
+    if (emailExist) {
+      // Create a test account or replace with real credentials.
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: "pawanaktu@gmail.com",
+          pass: "rpfpbrigspurulpu",
+        },
+      });
+
+      // Wrap in an async IIFE so we can use await.
+      (async () => {
+        const otp = Math.floor(Math.random() * 1000000);
+        const info = await transporter.sendMail({
+          from: "pawanaktu@gmail.com",
+          to: req.body.email,
+          subject: "Send OTP",
+          text: `Your OTP is : ${otp}`, // plain‑text body
+          html: `<b>Your OTP is : ${otp}</b>`, // HTML body
+        });
+
+        console.log("Message sent:", info.messageId);
+      })();
+
+      return res.status(400).json({ error: "Email already exists" });
+    } else {
+      return res.status(200).json({ message: "Email is available" });
+    }
+  } catch (error) {
+    console.error("Error occurred during email check:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

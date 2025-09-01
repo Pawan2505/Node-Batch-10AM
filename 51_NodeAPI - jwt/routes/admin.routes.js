@@ -15,5 +15,7 @@ router.get('/adminProfile',adminAuth,Admin.adminProfile);
 
 router.post('/changePassword',adminAuth,Admin.changePassword);
 
+router.post("/checkEmail", Admin.checkEmail)
+
 
 module.exports = router;
