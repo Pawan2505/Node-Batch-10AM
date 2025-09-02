@@ -1,4 +1,5 @@
 const AdminModel = require("../models/admin.model");
+const ManagerModel = require("../models/manager.model");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
@@ -208,20 +209,53 @@ module.exports.verifyOtp = async (req, res) => {
 
 
 module.exports.managerRegister = async (req, res) => {
-  try {
-    let data = req.body;
+  try{
 
-    // attach file path if file uploaded
-    if (req.file) {
-      data.image = req.file.path;
+    let checkManagerEmail = await ManagerModel.findOne({ email: req.body.email });
+    if (checkManagerEmail) {
+      return res.status(400).json({ error: "Manager already exists" });
+    }else{
+      if(req.body.password !== req.body.confirm_password){
+        let image = '';
+
+        if(req.file){
+          image = ManagerModel.managerImagePath + req.file.filename;
+        }
+        req.body.password = await bcrypt.hash(req.body.password, 10);
+        req.body.image = image;
+        req.body.status = 'active';
+        req.body.created_date = moment().format("DD-MM-YYYY");
+        req.body.updated_date = moment().format("DD-MM-YYYY");
+
+        const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: "pawanaktu@gmail.com",
+          pass: "rpfpbrigspurulpu",
+        },
+      });
+
+    const info = await transporter.sendMail({
+        from: "pawanaktu@gmail.com",
+        to: req.body.email,
+        subject: "Send OTP",
+        text: `Your OTP is here`,
+        html: `<b>Your Credentials are:</b><br>Email: ${req.body.email}<br>`,
+      });
+
+      if (info) {
+        let managerDetails = await ManagerModel.create(req.body);
+        return res.status(200).json({ message: "Manager registered successfully", data: managerDetails });
+      } else {
+        return res.status(500).json({ error: "Failed to send OTP" });
+      }
+      }
     }
 
-    const newManager = new ManagerModel(data);
-    await newManager.save();
-
-    res.status(201).json({ message: "Manager registered successfully", data: newManager });
-  } catch (err) {
-    console.error("Error in managerRegister:", err);
+  }catch(error){
+    console.error("Error occurred during manager registration:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
